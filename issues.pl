@@ -8,14 +8,15 @@ use File::Copy qw(move);
 use Data::Dumper;
 
 my ($version,$help,$verbose,$debug,$wikiformat,$ousername,$otype,
-  $shorttemplate,$searchterms,$odue);
+  $shorttemplate,$searchterms,$odue,$oshowc);
 GetOptions('h' => \$help, 'v' => \$verbose,'d' => \$debug,'V' => \$version,
   'wf' => \$wikiformat,
   'u=s' => \$ousername,
   't=s' => \$otype,
   'short' => \$shorttemplate,
   's=s' => \$searchterms,
-  'due=s' => \$odue
+  'due=s' => \$odue,
+  'showc' => \$oshowc
   ) or help_usage(1);
 
 if($help) {
@@ -111,6 +112,7 @@ if($subcommand eq "ls") {
     my $priority = $data->{"priority"} || '?/?';
     my $due = trim($data->{"due"}) || "2999-12-31";
     my $summary = $data->{"summary"} || "[field 'summary' is empty]";
+    my $assigned = $data->{"assignedname"} || $data->{"assigned"} || '[unassigned]';
     ## if we limit by due date, then the issue only gets filtered out if
     ## the due date of the issue has the correct format and is after the
     ## due date specified as an option. If we do not recognize the format,
@@ -126,9 +128,17 @@ if($subcommand eq "ls") {
       }
     }
     if($wikiformat) {
-      print "- $id $summary ($priority $due)\n";
+      print "%3* $id $summary ($priority $due $assigned)\n";
+      if($oshowc) {
+        ## use block quote %" .. %" or verbatim %< .. %> ??
+        print "\n",'%"',escapeForWiki($data->{'comments'}),'%"',"\n";  
+      }
     } else {
-      print "$i/$id $summary ($priority $due)\n";
+      if($oshowc) { print "**** "; }
+      print "$i/$id $summary ($priority $due $assigned)\n";
+      if($oshowc) {
+        print indentText($data->{'comments'},4),"\n\n";
+      }
     }
   }
 } elsif($subcommand eq "edit") {
@@ -190,6 +200,24 @@ if($subcommand eq "ls") {
   die "Subcommand $subcommand not supported or not implemented yet";
 }
 
+sub indentText {
+  my $text = shift;
+  my $indent = shift;
+  $indent = 4 unless($indent);
+  my $spaces = " " x $indent;
+  $text =~ s/\n/\n$spaces/g;
+  $text = $spaces . $text;
+  return $text;
+}
+
+sub escapeForWiki {
+  my $text = shift;
+  $text =~ s/\_/\\\_/g;
+  $text =~ s/\*/\\\*/g;
+  $text =~ s/\n/\%br\n/g;
+  return $text;
+}
+
 ## this consumes the next positional argument as an issueNumberOrId and
 ## returns the id
 sub get_issueId {
@@ -221,10 +249,11 @@ sub help_usage {
 sub help_subcommands {
   print STDERR "Subcommands: add, edit, close, ls, rm\n";
   print STDERR "  ls [-wf] [-u user] [-t type]: show all open issues and the most important information about each\n";
-  print STDERR "     [-wf]: use wiki output format\n";
+  print STDERR "     [-wf]: use GATE CoW wiki output format\n";
   print STDERR "     [-u user] [-t type]: limit by username of type (bug, todo, idea)\n"; 
   print STDERR "     [-s 'searchterms']: limit to issues containing those search terms, case insensitive\n";
   print STDERR "     [-due yyyy-mm-dd]: limit to issues due until that date\n";
+  print STDERR "     [-showc]: show the comments too (and use **** as an eyecatcher for the heading)\n";
   print STDERR "  add -t type: add a new issue of type todo, idea, bug\n";
   print STDERR "  edit numberOrId: edit the issue with that id or number\n";
   print STDERR "  rm numberOrId: remove the issue with that id or number\n";
