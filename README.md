@@ -1,6 +1,11 @@
 # simple-issues-tracker
 A very simple way to track ideas, todos, or bugs as files inside a Subversion or Git repository.
 
+[NOTE: this is still very much at the beginning of development with more features to come, especially
+for linking the issues that are bugs and todos to git branches and for making sure that new issues get
+checked in early so that nothing can ever get lost. Please add bug reports or feature requests as issues 
+in the github issue tracker: https://github.com/johann-petrak/simple-issues-tracker/issues]
+
 The idea of this simple script is that for small projects it can be 
 too much overhad to set up a issue tracker and one would just like to 
 keep the ideas, todos and bugs with the project repository.
