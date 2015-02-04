@@ -28,9 +28,9 @@ most frequent actions easier and less error-prone.
 
 1. clone the git repository somewhere: `git clone https://github.com/johann-petrak/simple-issues-tracker.git`
 2. Do one of the following things to make the script `issues.pl` accessible as a command:
-  2.1. copy the file to a directory that is already in your PATH, optionally renaming to a command name that you like better
-  2.2. OR add the directory you created by cloning to your PATH
-  2.3. OR create a symbolic link to `issues.pl` in a directory that is already in your PATH, e.g. `cd <mybindir>; ln -s <dirwheregotclonewasdone>/simple-issues-tracker/issues.pl sit` will make the script accessible as the `sit` command 
+  1. copy the file to a directory that is already in your PATH, optionally renaming to a command name that you like better
+  2. OR add the directory you created by cloning to your PATH
+  3. OR create a symbolic link to `issues.pl` in a directory that is already in your PATH, e.g. `cd <mybindir>; ln -s <dirwheregotclonewasdone>/simple-issues-tracker/issues.pl sit` will make the script accessible as the `sit` command 
 
 # Usage
 
