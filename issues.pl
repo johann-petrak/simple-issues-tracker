@@ -256,6 +256,7 @@ sub help_subcommands {
   print STDERR "     [-showc]: show the comments too (and use **** as an eyecatcher for the heading)\n";
   print STDERR "  add -t type: add a new issue of type todo, idea, bug\n";
   print STDERR "  edit numberOrId: edit the issue with that id or number\n";
+  print STDERR "  close numberOrId: close the issue with that id or number\n";
   print STDERR "  rm numberOrId: remove the issue with that id or number\n";
   print STDERR "  help subcommand: show more detailed info about a subcommand\n";
 }
